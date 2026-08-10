@@ -5,7 +5,9 @@ import InputLabel from '../../components/ui/InputLabel';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import TextInput from '../../components/ui/TextInput';
 import { Link } from 'react-router-dom';
+import useForm from '../../hooks/useForm';
 import RegisterImage from '../../assets/images/register.jpg'
+import GuestLayout from '../../layouts/GuestLayout';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,8 +32,10 @@ export default function Register() {
     };
 
     return (
+          <GuestLayout>
           
-          <div className=" w-full min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+          
+          <div className=" w-full min-h-screen h-[50%] flex items-center justify-center p-4 sm:p-6 lg:p-8">
             <div className="bg-white w-full max-w-7xl flex flex-col lg:flex-row rounded-2xl shadow-lg overflow-hidden">
               
               <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-10">
@@ -69,7 +73,7 @@ export default function Register() {
                         id="name"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className="mt-1 px-4 py-2 w-full"
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
@@ -87,7 +91,7 @@ export default function Register() {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 px-4 py-2 w-full"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
@@ -107,7 +111,7 @@ export default function Register() {
                           id="phone"
                           name="phone"
                           value={data.phone}
-                          className="w-full"
+                          className="w-full px-2 py-2"
                           autoComplete="phone"
                           placeholder=''
                           isFocused={true}
@@ -127,7 +131,7 @@ export default function Register() {
                         type={showPassword ? "text" : "password"}
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 px-4 py-2 w-full"
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
@@ -144,7 +148,7 @@ export default function Register() {
                         type={showPassword ? "text" : "password"}
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="mt-1 px-4 py-2 w-full"
                         autoComplete="new-password"
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                         required
@@ -158,14 +162,14 @@ export default function Register() {
                     onClick={()=> setShowPassword(!showPassword)}
                   />
 
-                  <span className="m-4 text-sm text-orange-600">
+                  <span className="m-2 text-sm text-orange-600">
                       Show Password
                   </span>
               </label>
-                <div className="flex flex-col mt-4">
-                    <PrimaryButton className="mx-auto mt-6 flex w-full sm:w-2/3 lg:w-1/2 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-500 py-3 font-semibold text-white transition-all duration-300 hover:bg-white hover:text-orange-500" disabled={processing}>
+                <div className="flex flex-col">
+                    <button className="mx-auto mt-6 flex w-full sm:w-2/3 lg:w-1/2 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-500 py-3 font-semibold text-white transition-all duration-300 hover:bg-white hover:text-orange-500" disabled={processing}>
                         Register
-                    </PrimaryButton>
+                    </button>
                 </div>
                 
             </form>
@@ -188,5 +192,6 @@ export default function Register() {
 
           </div>
         </div>
+        </GuestLayout>
     );
 }

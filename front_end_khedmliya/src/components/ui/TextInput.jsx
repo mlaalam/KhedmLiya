@@ -30,10 +30,18 @@ const TextInput = forwardRef(function TextInput(
         <input
             {...props}
             type={type}
-            className={
-              `border-orange-300 border-2 focus:ring-2 focus-outline-none focus:border-orange-600 focus:ring-orange-500 rounded-md shadow-sm  ${className}`
+            className={`
+              w-full
+                rounded-md
+                border-2
+                border-orange-500
+                shadow-sm
+                focus:border-orange-500
+                focus:ring-0
+                focus:outline-none
+                ${className}
                 
-            }
+            `}
             ref={localRef}
         />
     );
