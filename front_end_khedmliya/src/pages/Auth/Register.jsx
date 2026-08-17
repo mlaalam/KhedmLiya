@@ -102,16 +102,16 @@ export default function Register() {
 
                 <div className="mt-4">
                     <InputLabel htmlFor="phone" value="Phone" />
-                    <div className="mt-1 flex border border-orange-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm">
-                      <span className="flex items-center px-3 bg-gray-100 text-gray-600 border-r">
+                    <div className="mt-1 flex">
+                      <span className="flex items-center px-3 bg-gray-100 text-gray-600 border-2 border-orange-500 focus:border-orange-500 focus:ring-orange-500 rounded-l-md shadow-sm">
                           +212
                       </span>
 
-                      <TextInput
+                      <input
                           id="phone"
                           name="phone"
                           value={data.phone}
-                          className="w-full px-2 py-2"
+                          className="w-full px-2 py-2 border-orange-500 focus:border-orange-500 focus:ring-orange-500 shadow-sm border-2 rounded-r-md focus:ring-0 focus:outline-none"
                           autoComplete="phone"
                           placeholder=''
                           isFocused={true}
