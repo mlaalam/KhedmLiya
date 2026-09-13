@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('descreption')->nullable();
             $table->unsignedTinyInteger('working_days')->nullable(); 
             $table->unsignedTinyInteger('hours_per_day')->nullable();  
-            $table->string('email')->unique();
             $table->boolean('availability')->default(0);
             $table->enum('role',['artisan','client','admin'])->default('client');
             $table->string('email')->unique();

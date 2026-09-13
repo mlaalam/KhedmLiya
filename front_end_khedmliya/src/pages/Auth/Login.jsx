@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import LoginImage from '../../assets/images/login.jpg'
 import { Eye, EyeOff } from 'lucide-react';
 import useForm from '../../hooks/useForm';
+import { useLoginMutation } from '../../redux/services/authApi';
 
 export default function Login({
     status,
@@ -21,15 +22,19 @@ export default function Login({
         remember: false,
     });
     const [showPassword , setShowPassword] = useState(false)
-    useEffect(() => {
-        return () => reset('password');
-    }, []);
+    const {login ,isLoading , isError} = useLoginMutation();
 
-
-
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
-        post(route('login'));
+        try {
+
+      const result = await login({ email, password }).unwrap();
+      localStorage.setItem('token', result.accessToken);
+
+      alert('Logged in successfully!');
+      } catch (err) {
+        console.error('Login failed:', err);
+      }
     };
 
     return (
@@ -127,10 +132,11 @@ export default function Login({
                             )}
 
                             <button
+                                type="submit"
                                 disabled={processing}
                                 className="mx-auto mt-6 flex w-1/2 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-500 py-3 font-semibold text-white transition-all duration-300 hover:bg-white hover:text-orange-500"
                             >
-                                Log in
+                                {isLoading ? 'Logging in...' : 'Login'}
                             </button>
                         </div>
 
