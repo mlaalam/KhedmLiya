@@ -5,7 +5,7 @@ import InputError from '../../components/ui/InputError';
 import InputLabel from '../../components/ui/InputLabel';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import TextInput from '../../components/ui/TextInput';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginImage from '../../assets/images/login.jpg'
 import { Eye, EyeOff } from 'lucide-react';
 import useForm from '../../hooks/useForm';
@@ -22,19 +22,26 @@ export default function Login({
         remember: false,
     });
     const [showPassword , setShowPassword] = useState(false)
-    const {login ,isLoading , isError} = useLoginMutation();
+    const [login, { isLoading, isError }] = useLoginMutation();
+    const navigate = useNavigate();
 
     const submit = async (e) => {
         e.preventDefault();
+        setErrors({});
         try {
-
-      const result = await login({ email, password }).unwrap();
-      localStorage.setItem('token', result.accessToken);
-
-      alert('Logged in successfully!');
-      } catch (err) {
-        console.error('Login failed:', err);
-      }
+          const result = await login({ email:data.email , password:data.password }).unwrap();
+          localStorage.setItem('token', result.accessToken);
+          navigate('/')
+        } catch (err) {
+          if (err?.status === 422 && err?.data?.errors) {
+            setErrors({
+                email: err.data.errors.email?.[0] || '',
+                password: err.data.errors.password?.[0] || '',
+            });
+          } else if (err?.data?.message) {
+              setErrors({ email: err.data.message });
+          }
+        }
     };
 
     return (
