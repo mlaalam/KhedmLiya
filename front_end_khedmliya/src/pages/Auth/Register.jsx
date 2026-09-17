@@ -4,13 +4,14 @@ import InputError from '../../components/ui/InputError';
 import InputLabel from '../../components/ui/InputLabel';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import TextInput from '../../components/ui/TextInput';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import RegisterImage from '../../assets/images/register.jpg'
 import GuestLayout from '../../layouts/GuestLayout';
+import { useRegisterMutation } from '../../redux/services/authApi';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData , setErrors , processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
@@ -18,17 +19,31 @@ export default function Register() {
         phone: '',
         password_confirmation: '',
     });
+    const navigate = useNavigate()
     const [showPassword , setShowPassword] = useState(false)
-    useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
+    const [register , {isLoading }] = useRegisterMutation();
 
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
+        setErrors({});
+        try
+        {
+          const fromData = await register(data).unwrap();
+          if(fromData?.accessToken){
+            localStorage.setItem('token' , fromData.accessToken)
+          }
+          navigate('/')
+        }catch (err) {
+          const apiErrors = err?.data?.errors;
 
-        post(route('register'));
+          if (err?.status === 422 && apiErrors) {
+              const errors = {};
+              for (const key in apiErrors) errors[key] = apiErrors[key][0];
+              setErrors(errors);
+          } else if (err?.data?.message) {
+              setErrors({ email: err.data.message });
+          }
+      }
     };
 
     return (
@@ -77,7 +92,7 @@ export default function Register() {
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
-                        required
+                      
                     />
 
                     <InputError message={errors.name} className="mt-2" />
@@ -94,7 +109,7 @@ export default function Register() {
                         className="mt-1 px-4 py-2 w-full"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
-                        required
+                        
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -116,7 +131,7 @@ export default function Register() {
                           placeholder=''
                           isFocused={true}
                           onChange={(e) => setData('phone', e.target.value)}
-                          required
+                        
                       />
                     </div>
 
@@ -134,7 +149,7 @@ export default function Register() {
                         className="mt-1 px-4 py-2 w-full"
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
-                        required
+                      
                     />
 
                     <InputError message={errors.password} className="mt-2" />
@@ -151,7 +166,7 @@ export default function Register() {
                         className="mt-1 px-4 py-2 w-full"
                         autoComplete="new-password"
                         onChange={(e) => setData('password_confirmation', e.target.value)}
-                        required
+                        
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
@@ -167,8 +182,8 @@ export default function Register() {
                   </span>
               </label>
                 <div className="flex flex-col">
-                    <button className="mx-auto mt-6 flex w-full sm:w-2/3 lg:w-1/2 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-500 py-3 font-semibold text-white transition-all duration-300 hover:bg-white hover:text-orange-500" disabled={processing}>
-                        Register
+                    <button type='submit' className="mx-auto mt-6 flex w-full sm:w-2/3 lg:w-1/2 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-500 py-3 font-semibold text-white transition-all duration-300 hover:bg-white hover:text-orange-500" disabled={processing}>
+                        {isLoading ? 'Registering...' : 'Register'}
                     </button>
                 </div>
                 

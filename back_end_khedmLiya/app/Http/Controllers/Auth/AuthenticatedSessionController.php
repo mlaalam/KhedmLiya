@@ -20,11 +20,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): JsonResponse
     {
-        // $request->authenticate();
 
-        // $request->session()->regenerate();
-
-        // return response()->noContent();
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
